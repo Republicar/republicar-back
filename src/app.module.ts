@@ -6,10 +6,12 @@ import { AppService } from './app.service';
 import * as usersSchema from './users/schema';
 import * as republicsSchema from './republic/schema';
 import * as expensesSchema from './expense/schema';
+import * as categoriesSchema from './category/schema';
 import { AuthModule } from './auth/auth.module';
 import { RepublicModule } from './republic/republic.module';
 import { OccupantModule } from './occupant/occupant.module';
 import { ExpenseModule } from './expense/expense.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -25,7 +27,12 @@ import { ExpenseModule } from './expense/expense.module';
           },
         },
         config: {
-          schema: { ...usersSchema, ...republicsSchema, ...expensesSchema },
+          schema: {
+            ...usersSchema,
+            ...republicsSchema,
+            ...expensesSchema,
+            ...categoriesSchema,
+          },
         },
       }),
       inject: [ConfigService],
@@ -34,6 +41,7 @@ import { ExpenseModule } from './expense/expense.module';
     RepublicModule,
     OccupantModule,
     ExpenseModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
