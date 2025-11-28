@@ -1,2 +1,9 @@
 echo "Running pre-commit hooks with pnpm..."
 pnpm lint-staged
+echo "Running tests..."
+if [ "$IN_DOCKER" = "true" ]; then
+  pnpm test
+else
+  echo "Running tests in Docker..."
+  docker-compose run --rm api pnpm test
+fi

@@ -1,0 +1,15 @@
+services:
+  api:
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    # If you need to persist the local db file in a volume or bind mount it specifically:
+    # volumes:
+    #   - ./local.db:/app/local.db
