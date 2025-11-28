@@ -11,7 +11,7 @@ import { expenses } from './schema';
 import { republics } from '../republic/schema';
 import { categories } from '../category/schema';
 import { subcategories } from '../subcategory/schema';
-import { InferSelectModel, eq } from 'drizzle-orm';
+import { InferSelectModel, eq, and, gte, lte } from 'drizzle-orm';
 
 type Republic = InferSelectModel<typeof republics>;
 
@@ -87,5 +87,45 @@ export class ExpenseService {
       .execute();
 
     return { message: 'Expense created successfully' };
+  }
+
+  async findAll(
+    ownerId: number,
+    filters: { startDate?: string; endDate?: string; categoryId?: number },
+  ) {
+    // 1. Find the republic owned by the user
+    const republic: Republic[] = await this.db
+      .select()
+      .from(republics)
+      .where(eq(republics.ownerId, ownerId))
+      .execute();
+
+    if (republic.length === 0) {
+      throw new NotFoundException('Republic not found for this owner');
+    }
+
+    const republicId = republic[0].id;
+
+    // 2. Build query
+    const conditions = [eq(expenses.republicId, republicId)];
+
+    if (filters.startDate) {
+      conditions.push(gte(expenses.date, new Date(filters.startDate)));
+    }
+
+    if (filters.endDate) {
+      conditions.push(lte(expenses.date, new Date(filters.endDate)));
+    }
+
+    if (filters.categoryId) {
+      conditions.push(eq(expenses.categoryId, filters.categoryId));
+    }
+
+    // 3. Execute query
+    return this.db
+      .select()
+      .from(expenses)
+      .where(and(...conditions))
+      .execute();
   }
 }
