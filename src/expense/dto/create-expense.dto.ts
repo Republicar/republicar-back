@@ -1,9 +1,11 @@
 import {
   IsDateString,
   IsNotEmpty,
-  IsNumber,
   IsString,
   Min,
+  IsInt,
+  IsOptional,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateExpenseDto {
@@ -18,4 +20,12 @@ export class CreateExpenseDto {
   @IsDateString()
   @IsNotEmpty()
   date: string;
+
+  @IsInt()
+  @IsNotEmpty()
+  categoryId: number;
+
+  @IsInt()
+  @IsOptional()
+  subcategoryId?: number;
 }

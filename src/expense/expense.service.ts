@@ -1,10 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { InjectDrizzle } from '@knaadh/nestjs-drizzle-turso';
 import { LibSQLDatabase } from 'drizzle-orm/libsql';
 import * as schema from '../republic/schema';
 import { expenses } from './schema';
 import { republics } from '../republic/schema';
+import { categories } from '../category/schema';
+import { subcategories } from '../subcategory/schema';
 import { InferSelectModel, eq } from 'drizzle-orm';
 
 type Republic = InferSelectModel<typeof republics>;
@@ -14,7 +20,8 @@ export class ExpenseService {
   constructor(@InjectDrizzle() private db: LibSQLDatabase<typeof schema>) {}
 
   async create(createExpenseDto: CreateExpenseDto, ownerId: number) {
-    const { description, amount, date } = createExpenseDto;
+    const { description, amount, date, categoryId, subcategoryId } =
+      createExpenseDto;
 
     // 1. Find the republic owned by the user
     const republic: Republic[] = await this.db
@@ -29,7 +36,43 @@ export class ExpenseService {
 
     const republicId = republic[0].id;
 
-    // 2. Create expense
+    // 2. Validate Category
+    const categoryResult = await this.db
+      .select()
+      .from(categories)
+      .where(eq(categories.id, categoryId))
+      .execute();
+
+    if (categoryResult.length === 0) {
+      throw new NotFoundException('Category not found');
+    }
+
+    const category = categoryResult[0];
+    if (category.republicId !== republicId) {
+      throw new NotFoundException('Category does not belong to this republic');
+    }
+
+    // 3. Validate Subcategory (if provided)
+    if (subcategoryId) {
+      const subcategoryResult = await this.db
+        .select()
+        .from(subcategories)
+        .where(eq(subcategories.id, subcategoryId))
+        .execute();
+
+      if (subcategoryResult.length === 0) {
+        throw new NotFoundException('Subcategory not found');
+      }
+
+      const subcategory = subcategoryResult[0];
+      if (subcategory.categoryId !== categoryId) {
+        throw new BadRequestException(
+          'Subcategory does not belong to the specified category',
+        );
+      }
+    }
+
+    // 4. Create expense
     await this.db
       .insert(expenses)
       .values({
@@ -37,10 +80,12 @@ export class ExpenseService {
         amount,
         date: new Date(date),
         republicId,
+        categoryId,
+        subcategoryId: subcategoryId || null,
         createdAt: new Date(),
       })
       .execute();
 
-    return { message: 'Expense registered successfully' };
+    return { message: 'Expense created successfully' };
   }
 }
