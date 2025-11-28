@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -50,5 +51,11 @@ export class OccupantController {
     @Request() req: RequestWithUser,
   ) {
     return this.occupantService.update(+id, updateOccupantDto, req.user.userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':id')
+  async remove(@Param('id') id: string, @Request() req: RequestWithUser) {
+    return this.occupantService.remove(+id, req.user.userId);
   }
 }

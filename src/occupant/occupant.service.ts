@@ -158,4 +158,41 @@ export class OccupantService {
 
     return { message: 'Occupant updated successfully' };
   }
+
+  async remove(id: number, ownerId: number) {
+    // 1. Find the republic owned by the user
+
+    const republic: Republic[] = await this.db
+      .select()
+      .from(republics)
+      .where(eq(republics.ownerId, ownerId))
+      .execute();
+
+    if (republic.length === 0) {
+      throw new NotFoundException('Republic not found for this owner');
+    }
+
+    const republicId = republic[0].id;
+
+    // 2. Check if the occupant belongs to the republic
+    const idCol = users.id;
+    const occupant: User[] = await this.db
+      .select()
+      .from(users)
+      .where(eq(idCol, id))
+      .execute();
+
+    if (occupant.length === 0) {
+      throw new NotFoundException('Occupant not found');
+    }
+
+    if (occupant[0].republicId !== republicId) {
+      throw new NotFoundException('Occupant not found in your republic');
+    }
+
+    // 3. Delete occupant
+    await this.db.delete(users).where(eq(idCol, id)).execute();
+
+    return { message: 'Occupant removed successfully' };
+  }
 }
