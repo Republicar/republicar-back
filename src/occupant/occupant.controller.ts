@@ -2,12 +2,15 @@ import {
   Body,
   Controller,
   Get,
+  Param,
+  Patch,
   Post,
   Request,
   UseGuards,
 } from '@nestjs/common';
 import { OccupantService } from './occupant.service';
 import { CreateOccupantDto } from './dto/create-occupant.dto';
+import { UpdateOccupantDto } from './dto/update-occupant.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 interface RequestWithUser extends Request {
@@ -37,5 +40,15 @@ export class OccupantController {
   @Get()
   async findAll(@Request() req: RequestWithUser) {
     return this.occupantService.findAll(req.user.userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateOccupantDto: UpdateOccupantDto,
+    @Request() req: RequestWithUser,
+  ) {
+    return this.occupantService.update(+id, updateOccupantDto, req.user.userId);
   }
 }
