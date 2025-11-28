@@ -22,6 +22,20 @@
       "when": 1764360281747,
       "tag": "0002_lethal_scalphunter",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1764367135407,
+      "tag": "0003_stiff_hobgoblin",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1764367238399,
+      "tag": "0004_thankful_mercury",
+      "breakpoints": true
     }
   ]
 }

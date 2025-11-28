@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
 import {
   ConflictException,
   Injectable,
@@ -66,6 +65,7 @@ export class OccupantService {
         passwordHash,
         role: 'OCCUPANT',
         republicId,
+        createdAt: new Date(),
       })
       .execute();
 

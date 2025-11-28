@@ -5,9 +5,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as usersSchema from './users/schema';
 import * as republicsSchema from './republic/schema';
+import * as expensesSchema from './expense/schema';
 import { AuthModule } from './auth/auth.module';
 import { RepublicModule } from './republic/republic.module';
 import { OccupantModule } from './occupant/occupant.module';
+import { ExpenseModule } from './expense/expense.module';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { OccupantModule } from './occupant/occupant.module';
           },
         },
         config: {
-          schema: { ...usersSchema, ...republicsSchema },
+          schema: { ...usersSchema, ...republicsSchema, ...expensesSchema },
         },
       }),
       inject: [ConfigService],
@@ -31,6 +33,7 @@ import { OccupantModule } from './occupant/occupant.module';
     AuthModule,
     RepublicModule,
     OccupantModule,
+    ExpenseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -9,7 +9,5 @@ export const republics = sqliteTable('republics', {
   ownerId: integer('owner_id')
     .notNull()
     .references(() => users.id),
-  createdAt: integer('created_at', { mode: 'timestamp' })
-    .notNull()
-    .default(new Date()),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().notNull(),
 });

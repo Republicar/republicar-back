@@ -19,6 +19,7 @@ export class RepublicService {
         address,
         rooms,
         ownerId,
+        createdAt: new Date(),
       })
       .execute();
 
