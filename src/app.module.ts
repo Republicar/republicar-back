@@ -7,11 +7,13 @@ import * as usersSchema from './users/schema';
 import * as republicsSchema from './republic/schema';
 import * as expensesSchema from './expense/schema';
 import * as categoriesSchema from './category/schema';
+import * as subcategoriesSchema from './subcategory/schema';
 import { AuthModule } from './auth/auth.module';
 import { RepublicModule } from './republic/republic.module';
 import { OccupantModule } from './occupant/occupant.module';
 import { ExpenseModule } from './expense/expense.module';
 import { CategoryModule } from './category/category.module';
+import { SubcategoryModule } from './subcategory/subcategory.module';
 
 @Module({
   imports: [
@@ -32,6 +34,7 @@ import { CategoryModule } from './category/category.module';
             ...republicsSchema,
             ...expensesSchema,
             ...categoriesSchema,
+            ...subcategoriesSchema,
           },
         },
       }),
@@ -42,6 +45,7 @@ import { CategoryModule } from './category/category.module';
     OccupantModule,
     ExpenseModule,
     CategoryModule,
+    SubcategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

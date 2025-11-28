@@ -6,6 +6,7 @@ export default defineConfig({
     './src/republic/schema.ts',
     './src/expense/schema.ts',
     './src/category/schema.ts',
+    './src/subcategory/schema.ts',
   ],
   out: './drizzle',
   dialect: 'sqlite',
