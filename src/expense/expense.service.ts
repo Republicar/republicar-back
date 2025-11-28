@@ -17,7 +17,7 @@ type Republic = InferSelectModel<typeof republics>;
 
 @Injectable()
 export class ExpenseService {
-  constructor(@InjectDrizzle() private db: LibSQLDatabase<typeof schema>) {}
+  constructor(@InjectDrizzle() private db: LibSQLDatabase<typeof schema>) { }
 
   async create(createExpenseDto: CreateExpenseDto, ownerId: number) {
     const { description, amount, date, categoryId, subcategoryId } =
@@ -127,5 +127,42 @@ export class ExpenseService {
       .from(expenses)
       .where(and(...conditions))
       .execute();
+  }
+
+  async toggleExclusion(id: number, ownerId: number) {
+    // 1. Verify ownership
+    const expenseResult = await this.db
+      .select()
+      .from(expenses)
+      .where(eq(expenses.id, id))
+      .execute();
+
+    if (expenseResult.length === 0) {
+      throw new NotFoundException('Expense not found');
+    }
+    const expense = expenseResult[0];
+
+    const republicResult = await this.db
+      .select()
+      .from(republics)
+      .where(eq(republics.id, expense.republicId))
+      .execute();
+
+    if (republicResult.length === 0 || republicResult[0].ownerId !== ownerId) {
+      throw new NotFoundException('Expense not found or access denied');
+    }
+
+    if (expense.reportId) {
+      throw new BadRequestException('Cannot modify expense that is already included in a report');
+    }
+
+    // 2. Toggle
+    await this.db
+      .update(expenses)
+      .set({ isExcluded: !expense.isExcluded })
+      .where(eq(expenses.id, id))
+      .execute();
+
+    return { message: 'Expense exclusion status updated', isExcluded: !expense.isExcluded };
   }
 }

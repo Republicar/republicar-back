@@ -8,12 +8,14 @@ import * as republicsSchema from './republic/schema';
 import * as expensesSchema from './expense/schema';
 import * as categoriesSchema from './category/schema';
 import * as subcategoriesSchema from './subcategory/schema';
+import * as reportsSchema from './report/schema';
 import { AuthModule } from './auth/auth.module';
 import { RepublicModule } from './republic/republic.module';
 import { OccupantModule } from './occupant/occupant.module';
 import { ExpenseModule } from './expense/expense.module';
 import { CategoryModule } from './category/category.module';
 import { SubcategoryModule } from './subcategory/subcategory.module';
+import { ReportModule } from './report/report.module';
 
 @Module({
   imports: [
@@ -35,6 +37,7 @@ import { SubcategoryModule } from './subcategory/subcategory.module';
             ...expensesSchema,
             ...categoriesSchema,
             ...subcategoriesSchema,
+            ...reportsSchema,
           },
         },
       }),
@@ -46,8 +49,9 @@ import { SubcategoryModule } from './subcategory/subcategory.module';
     ExpenseModule,
     CategoryModule,
     SubcategoryModule,
+    ReportModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

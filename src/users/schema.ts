@@ -7,6 +7,8 @@ export const users = sqliteTable('users', {
   passwordHash: text('password_hash').notNull(),
   role: text('role').notNull().default('OWNER'),
   republicId: integer('republic_id'), // Removed .references() to avoid circular dependency with republics table during creation
+  income: integer('income'), // in cents
+
 
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().notNull(),
 });

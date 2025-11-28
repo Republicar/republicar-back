@@ -6,6 +6,9 @@ import {
   UseGuards,
   Get,
   Query,
+  Patch,
+  Param,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ExpenseService } from './expense.service';
 import { CreateExpenseDto } from './dto/create-expense.dto';
@@ -20,7 +23,7 @@ interface RequestWithUser extends Request {
 
 @Controller('expense')
 export class ExpenseController {
-  constructor(private readonly expenseService: ExpenseService) {}
+  constructor(private readonly expenseService: ExpenseService) { }
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
@@ -44,5 +47,14 @@ export class ExpenseController {
       endDate,
       categoryId: categoryId ? parseInt(categoryId, 10) : undefined,
     });
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch(':id/exclude')
+  async toggleExclusion(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req: RequestWithUser,
+  ) {
+    return this.expenseService.toggleExclusion(id, req.user.userId);
   }
 }
