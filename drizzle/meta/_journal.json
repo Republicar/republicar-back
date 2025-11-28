@@ -8,6 +8,13 @@
       "when": 1764314718030,
       "tag": "0000_heavy_scalphunter",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1764316829990,
+      "tag": "0001_blushing_pride",
+      "breakpoints": true
     }
   ]
 }

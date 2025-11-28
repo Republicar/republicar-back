@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as schema from './database/schema';
 import { AuthModule } from './auth/auth.module';
+import { RepublicModule } from './republic/republic.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AuthModule } from './auth/auth.module';
       inject: [ConfigService],
     }),
     AuthModule,
+    RepublicModule,
   ],
   controllers: [AppController],
   providers: [AppService],
