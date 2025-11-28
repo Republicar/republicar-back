@@ -4,6 +4,7 @@ import { DrizzleTursoModule } from '@knaadh/nestjs-drizzle-turso';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as schema from './database/schema';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import * as schema from './database/schema';
       }),
       inject: [ConfigService],
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
