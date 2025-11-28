@@ -1,4 +1,11 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { OccupantService } from './occupant.service';
 import { CreateOccupantDto } from './dto/create-occupant.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -24,5 +31,11 @@ export class OccupantController {
     // if (req.user.role !== 'OWNER') { throw new ForbiddenException(...) }
 
     return this.occupantService.create(createOccupantDto, req.user.userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get()
+  async findAll(@Request() req: RequestWithUser) {
+    return this.occupantService.findAll(req.user.userId);
   }
 }

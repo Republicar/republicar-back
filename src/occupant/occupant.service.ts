@@ -18,7 +18,7 @@ import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class OccupantService {
-  constructor(@InjectDrizzle() private db: LibSQLDatabase<typeof schema>) {}
+  constructor(@InjectDrizzle() private db: LibSQLDatabase<typeof schema>) { }
 
   async create(createOccupantDto: CreateOccupantDto, ownerId: number) {
     const { name, email, password } = createOccupantDto;
@@ -42,8 +42,7 @@ export class OccupantService {
     const existingUser: User[] = await this.db
       .select()
       .from(users)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      .where(eq(users.email, email))
+      .where(eq(users.email, email)) // eslint-disable-line @typescript-eslint/no-unsafe-member-access
       .execute();
 
     if (existingUser.length > 0) {
@@ -68,5 +67,35 @@ export class OccupantService {
       .execute();
 
     return { message: 'Occupant added successfully' };
+  }
+
+  async findAll(ownerId: number) {
+    // 1. Find the republic owned by the user
+
+    const republic: Republic[] = await this.db
+      .select()
+      .from(republics)
+      .where(eq(republics.ownerId, ownerId))
+      .execute();
+
+    if (republic.length === 0) {
+      throw new NotFoundException('Republic not found for this owner');
+    }
+
+    const republicId = republic[0].id;
+
+    // 2. Find all occupants of this republic
+
+    const occupants: User[] = await this.db
+      .select()
+      .from(users)
+      .where(eq(users.republicId, republicId)) // eslint-disable-line @typescript-eslint/no-unsafe-member-access
+      .execute();
+
+    // 3. Return occupants (excluding sensitive data)
+    return occupants.map((occupant) => {
+      const { passwordHash: _, ...result } = occupant;
+      return result;
+    });
   }
 }
