@@ -21,6 +21,28 @@
 $ pnpm install
 ```
 
+## Database Setup
+
+This project uses Turso (libSQL) with Drizzle ORM.
+
+### Local Development
+
+For local development, we use a local SQLite file (`local.db`).
+
+1. Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+2. Ensure `.env` has the following configuration:
+   ```env
+   TURSO_DATABASE_URL="file:local.db"
+   TURSO_AUTH_TOKEN=""
+   ```
+3. Push the schema to the local database:
+   ```bash
+   npx drizzle-kit push
+   ```
+
 ## Compile and run the project
 
 ```bash
