@@ -1,6 +1,6 @@
 FROM node:22-alpine AS base
 
-RUN apk add --no-cache git && \
+RUN apk add --no-cache git python3 make g++ && \
     git config --system --add safe.directory /app
 
 # Install pnpm
@@ -13,7 +13,7 @@ RUN corepack enable
 WORKDIR /app
 
 FROM base AS dependencies
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 FROM base AS development
