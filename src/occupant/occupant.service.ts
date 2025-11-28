@@ -8,8 +8,9 @@ import { CreateOccupantDto } from './dto/create-occupant.dto';
 import { UpdateOccupantDto } from './dto/update-occupant.dto';
 import { InjectDrizzle } from '@knaadh/nestjs-drizzle-turso';
 import { LibSQLDatabase } from 'drizzle-orm/libsql';
-import * as schema from '../database/schema';
-import { users, republics } from '../database/schema';
+import * as schema from '../users/schema';
+import { users } from '../users/schema';
+import { republics } from '../republic/schema';
 import { InferSelectModel } from 'drizzle-orm';
 
 type Republic = InferSelectModel<typeof republics>;

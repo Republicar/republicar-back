@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateRepublicDto } from './dto/create-republic.dto';
 import { InjectDrizzle } from '@knaadh/nestjs-drizzle-turso';
 import { LibSQLDatabase } from 'drizzle-orm/libsql';
-import * as schema from '../database/schema';
-import { republics } from '../database/schema';
+import * as schema from '../republic/schema';
+import { republics } from '../republic/schema';
 
 @Injectable()
 export class RepublicService {

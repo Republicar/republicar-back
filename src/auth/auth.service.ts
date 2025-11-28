@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
 import {
   ConflictException,
   Injectable,
@@ -6,8 +7,8 @@ import {
 import { RegisterDto } from './dto/register.dto';
 import { InjectDrizzle } from '@knaadh/nestjs-drizzle-turso';
 import { LibSQLDatabase } from 'drizzle-orm/libsql';
-import * as schema from '../database/schema';
-import { users } from '../database/schema';
+import { users } from '../users/schema';
+import * as schema from '../users/schema';
 import * as bcrypt from 'bcrypt';
 import { InferSelectModel, eq } from 'drizzle-orm';
 import { JwtService } from '@nestjs/jwt';
