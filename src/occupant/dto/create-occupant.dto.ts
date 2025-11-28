@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreateOccupantDto {
   @IsString()
@@ -6,10 +6,14 @@ export class CreateOccupantDto {
   name: string;
 
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @IsString()
-  @IsNotEmpty()
   @MinLength(6)
   password: string;
+
+  @IsInt()
+  @IsOptional()
+  income?: number; // in cents
 }

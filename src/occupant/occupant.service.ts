@@ -20,10 +20,10 @@ import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class OccupantService {
-  constructor(@InjectDrizzle() private db: LibSQLDatabase<typeof schema>) {}
+  constructor(@InjectDrizzle() private db: LibSQLDatabase<typeof schema>) { }
 
   async create(createOccupantDto: CreateOccupantDto, ownerId: number) {
-    const { name, email, password } = createOccupantDto;
+    const { name, email, password, income } = createOccupantDto;
 
     // 1. Find the republic owned by the user
 
@@ -65,6 +65,7 @@ export class OccupantService {
         passwordHash,
         role: 'OCCUPANT',
         republicId,
+        income,
         createdAt: new Date(),
       })
       .execute();

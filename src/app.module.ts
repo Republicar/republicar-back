@@ -16,6 +16,7 @@ import { ExpenseModule } from './expense/expense.module';
 import { CategoryModule } from './category/category.module';
 import { SubcategoryModule } from './subcategory/subcategory.module';
 import { ReportModule } from './report/report.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { ReportModule } from './report/report.module';
     CategoryModule,
     SubcategoryModule,
     ReportModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
