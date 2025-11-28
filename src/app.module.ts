@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import * as schema from './database/schema';
 import { AuthModule } from './auth/auth.module';
 import { RepublicModule } from './republic/republic.module';
+import { OccupantModule } from './occupant/occupant.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { RepublicModule } from './republic/republic.module';
     }),
     AuthModule,
     RepublicModule,
+    OccupantModule,
   ],
   controllers: [AppController],
   providers: [AppService],

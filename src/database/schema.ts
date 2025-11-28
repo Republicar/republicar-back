@@ -6,6 +6,10 @@ export const users = sqliteTable('users', {
   email: text('email').notNull().unique(),
   passwordHash: text('password_hash').notNull(),
   role: text('role').notNull().default('OWNER'),
+  republicId: integer('republic_id').references(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+    () => republics.id,
+  ),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
     .default(new Date()),
@@ -17,7 +21,10 @@ export const republics = sqliteTable('republics', {
   rooms: integer('rooms').notNull(),
   ownerId: integer('owner_id')
     .notNull()
-    .references(() => users.id),
+    .references(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+      () => users.id,
+    ),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
     .default(new Date()),
